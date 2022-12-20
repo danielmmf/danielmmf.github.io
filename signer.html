@@ -1,0 +1,90 @@
+
+<html>
+    <body>
+      <canvas id="signature-pad" width="400" height="200"></canvas>
+      <br>
+      <button id="clear-button">Limpar</button>
+      <button id="save-button">Salvar como imagem</button>
+      <button id="export-button">Exportar para PDF</button>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.2.61/jspdf.debug.js"></script>
+      <script>
+        var canvas = document.getElementById("signature-pad");
+        var context = canvas.getContext("2d");
+        var clearButton = document.getElementById("clear-button");
+        var saveButton = document.getElementById("save-button");
+        var exportButton = document.getElementById("export-button");
+  
+        // Inicialize as configurações do canvas
+        context.lineWidth = 2;
+        context.lineCap = "round";
+        context.strokeStyle = "black";
+  
+        // Adicione um evento de touchstart ao canvas
+        canvas.addEventListener("touchstart", function(event) {
+          // Obtenha as coordenadas do toque
+          var x = event.touches[0].clientX - canvas.offsetLeft;
+          var y = event.touches[0].clientY - canvas.offsetTop;
+  
+          // Mude para o início da linha atual
+          context.moveTo(x, y);
+        });
+  
+        // Adicione um evento de touchmove ao canvas
+        canvas.addEventListener("touchmove", function(event) {
+          // Evite a propagação do evento
+          event.preventDefault();
+  
+          // Obtenha as coordenadas do toque
+          var x = event.touches[0].clientX - canvas.offsetLeft;
+          var y = event.touches[0].clientY - canvas.offsetTop;
+  
+          // Desenhe uma linha até as coordenadas do toque
+          context.lineTo(x, y);
+          context.stroke();
+        });
+  
+        // Adicione um evento de mousedown ao canvas
+        canvas.addEventListener("mousedown", function(event) {
+          // Mude para o início da linha atual
+          context.moveTo(event.offsetX, event.offsetY);
+        });
+  
+        // Adicione um evento de mousemove ao canvas
+        canvas.addEventListener("mousemove", function(event) {
+          // Desenhe uma linha até as coordenadas do mouse
+          context.lineTo(event.offsetX, event.offsetY);
+          context.stroke();
+        });
+  
+        // Adicione um evento de click ao botão de limpar
+        clearButton.addEventListener("click", function() {
+          // Limpe o canvas
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          window.location.reload();
+        });
+  
+        // Adicione um evento de click ao botão de salvar
+        saveButton.addEventListener("click", function() {
+          // Salve a assinatura como uma imagem PNG
+          var imageData = canvas.toDataURL("image/png");
+          var link = document.createElement("a");
+          link.download = "assinatura.png";
+          link.href = imageData;
+          link.click();
+        });
+  
+        // Adicione um evento de click ao botão de exportar
+        exportButton.addEventListener("click", function() {
+          // Crie um novo documento PDF
+          var pdf = new jsPDF();
+         // var pdf = window.jsPDF = window.jspdf.jsPDF;
+  
+          // Adicione a imagem da assinatura ao PDF
+          pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0);
+  
+          // Salve o PDF com o nome "assinatura.pdf"
+          pdf.save("assinatura.pdf");
+        });
+      </script>
+    </body>
+  </html>
