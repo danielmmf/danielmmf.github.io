@@ -1,0 +1,14 @@
+{
+  "name": "Daniel Medeiros",
+  "short_name": "Daniel",
+  "icons": [
+    {
+      "src": "/favicon/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#081120",
+  "background_color": "#081120",
+  "display": "standalone"
+}
